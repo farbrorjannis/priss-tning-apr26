@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prissättningsverktyg för konstnärer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f5f3ef;color:#1a1a1a;padding:1.5rem 1rem;min-height:100vh}
+.wrap{max-width:440px;margin:0 auto}
+h1{font-size:20px;font-weight:500;margin-bottom:4px}
+.intro{font-size:13px;color:#666;margin-bottom:1.5rem;line-height:1.5}
+.section-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:8px}
+.row{display:flex;gap:12px;margin-bottom:1rem}
+.field{flex:1;display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;color:#666;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.field input[type=number]{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#1a1a1a;font-size:16px;font-family:inherit}
+.field input[type=number]:focus{outline:none;border-color:#534AB7}
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem}
+.lvl{border-radius:12px;border:1px solid #ddd;padding:10px 12px;cursor:pointer;background:#fff;transition:border-color .15s}
+.lvl.active{border:2px solid #534AB7;background:#EEEDFE}
+.lvl-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
+.lvl-title{font-size:13px;font-weight:500;color:#1a1a1a}
+.lvl.active .lvl-title{color:#3C3489}
+.lvl-x{font-size:20px;font-weight:500;color:#aaa}
+.lvl.active .lvl-x{color:#534AB7}
+.lvl-sub{font-size:11px;color:#888;line-height:1.4}
+.lvl.active .lvl-sub{color:#534AB7}
+.custom-row{display:flex;gap:8px;align-items:center;margin-bottom:1.25rem}
+.custom-row label{font-size:12px;color:#666;white-space:nowrap}
+.custom-row input[type=number]{width:90px;padding:7px 10px;border-radius:8px;border:1px solid #ccc;background:#fff;color:#1a1a1a;font-size:14px;font-family:inherit}
+.custom-row input[type=number]:focus{outline:none;border-color:#534AB7}
+.result-card{background:#ede9e2;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem}
+.result-label{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.result-price{font-size:38px;font-weight:500;color:#1a1a1a;letter-spacing:-.5px}
+.result-formula{font-size:13px;color:#888;margin-top:6px}
+.result-formula span{color:#1a1a1a;font-weight:500}
+.divider{height:1px;background:#ddd;margin:1.25rem 0}
+.tips-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:8px}
+.tip-row{font-size:13px;color:#666;line-height:1.6;padding:8px 0;border-bottom:1px solid #eee}
+.tip-row:last-child{border-bottom:none}
+.tip-row b{color:#1a1a1a;font-weight:500}
+.footer{font-size:11px;color:#aaa;text-align:center;margin-top:2rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Prissättning för konstnärer</h1>
+  <p class="intro">Formeln: (höjd + bredd) × nivå = pris inkl. ram</p>
+
+  <div class="section-label">Konstverkets mått (cm)</div>
+  <div class="row">
+    <div class="field">
+      <label>Höjd</label>
+      <input type="number" id="h" value="50" min="1" max="500">
+    </div>
+    <div class="field">
+      <label>Bredd</label>
+      <input type="number" id="w" value="70" min="1" max="500">
+    </div>
+  </div>
+
+  <div class="section-label">Din nivå</div>
+  <div class="levels" id="levels">
+    <div class="lvl" data-x="20">
+      <div class="lvl-header"><div class="lvl-title">Nybörjare</div><div class="lvl-x">×20</div></div>
+      <div class="lvl-sub">Utforskar sitt uttryck. De första åren som aktiv konstnär.</div>
+    </div>
+    <div class="lvl" data-x="35">
+      <div class="lvl-header"><div class="lvl-title">Under etablering</div><div class="lvl-x">×35</div></div>
+      <div class="lvl-sub">Börjar hitta sin stil. Verk efterfrågas alltmer.</div>
+    </div>
+    <div class="lvl active" data-x="50">
+      <div class="lvl-header"><div class="lvl-title">Etablerad</div><div class="lvl-x">×50</div></div>
+      <div class="lvl-sub">~5 000 timmar. Ställer ut regelbundet, samlingar.</div>
+    </div>
+    <div class="lvl" data-x="100">
+      <div class="lvl-header"><div class="lvl-title">Professionell</div><div class="lvl-x">×100</div></div>
+      <div class="lvl-sub">Formell utbildning, 10 000+ timmar vid staffliet.</div>
+    </div>
+  </div>
+
+  <div class="custom-row">
+    <label>Egen faktor:</label>
+    <input type="number" id="custom-x" placeholder="t.ex. 45" min="1" max="999">
+  </div>
+
+  <div class="result-card">
+    <div class="result-label">Rekommenderat pris inkl. ram</div>
+    <div class="result-price" id="price">6 000 kr</div>
+    <div class="result-formula" id="formula">(50 + 70) × <span>50</span> = 6 000</div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="tips-title">5 råd att ha med sig</div>
+  <div class="tip-row"><b>Börja i tid</b> — vänta inte med prissättning till sista stund</div>
+  <div class="tip-row"><b>Var konsekvent</b> — samma modell för alla verk under samma period</div>
+  <div class="tip-row"><b>Utvärdera löpande</b> — höj faktorn när du känt att du utvecklats</div>
+  <div class="tip-row"><b>Fråga kollegor</b> — bolla dina priser med andra konstnärer</div>
+  <div class="tip-row"><b>Lita på modellen</b> — den är framtagen av konstnärer för konstnärer</div>
+
+  <p class="footer">Formeln: (höjd + bredd) × nivåfaktor = pris inkl. ram</p>
+</div>
+
+<script>
+let selectedX = 50;
+
+function fmt(n){return n.toLocaleString('sv-SE');}
+
+function calc(){
+  const h = parseFloat(document.getElementById('h').value)||0;
+  const w = parseFloat(document.getElementById('w').value)||0;
+  const customX = parseFloat(document.getElementById('custom-x').value);
+  const x = (!isNaN(customX) && customX > 0) ? customX : selectedX;
+  const price = (h + w) * x;
+  document.getElementById('price').textContent = fmt(Math.round(price)) + ' kr';
+  document.getElementById('formula').innerHTML = '(' + Math.round(h) + ' + ' + Math.round(w) + ') × <span>' + x + '</span> = ' + fmt(Math.round(price));
+}
+
+document.querySelectorAll('.lvl').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.lvl').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    selectedX = parseFloat(btn.dataset.x);
+    document.getElementById('custom-x').value = '';
+    calc();
+  });
+});
+
+document.getElementById('h').addEventListener('input', calc);
+document.getElementById('w').addEventListener('input', calc);
+document.getElementById('custom-x').addEventListener('input', function(e){
+  if(e.target.value){
+    document.querySelectorAll('.lvl').forEach(function(b){b.classList.remove('active');});
+  } else {
+    document.querySelectorAll('.lvl').forEach(function(b,i){if(i===2)b.classList.add('active');});
+    selectedX = 50;
+  }
+  calc();
+});
+
+calc();
+</script>
+</body>
+</html>
