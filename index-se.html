@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hur ska jag prissätta min konst? – Kalkylator | Akvarellskiss</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cream: #faf8f3;
+            --warm: #fff9f2;
+            --dark: #2c1f10;
+            --mid: #6b4c2a;
+            --light: #c4a882;
+            --ochre: #c07d2b;
+            --ochre-l: #f0e0c0;
+            --border: #ddd0bc;
+            --r: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--cream);
+            color: var(--dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem 1.5rem;
+        }
+
+        header {
+            background-color: var(--dark);
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        header h1 {
+            color: var(--ochre-l);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        header .subtitle {
+            color: var(--light);
+            font-variant: small-caps;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .card {
+            background-color: var(--warm);
+            border: 1.5px solid var(--border);
+            border-radius: var(--r);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--mid);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            background-color: var(--cream);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: 'Lato', sans-serif;
+            font-size: 1.1rem;
+            color: var(--dark);
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--ochre);
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: var(--mid);
+            margin-top: 0.4rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            gap: 1.25rem;
+        }
+        
+        @media (min-width: 480px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+        }
+
+        .notice {
+            background-color: var(--ochre-l);
+            border-left: 4px solid var(--ochre);
+            padding: 1.25rem;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            color: var(--dark);
+        }
+
+        .notice p {
+            margin-bottom: 0.5rem;
+        }
+        .notice p:last-child {
+            margin-bottom: 0;
+        }
+
+        .factor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .factor-btn {
+            background-color: var(--cream);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            color: var(--dark);
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .factor-btn:hover {
+            border-color: var(--ochre);
+        }
+
+        .factor-btn.active {
+            background-color: var(--dark);
+            color: var(--ochre-l);
+            border-color: var(--dark);
+        }
+
+        .factor-btn .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .factor-btn .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .factor-btn .lbl {
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+        }
+
+        .factor-btn .sub {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 0.1rem;
+        }
+
+        .factor-btn.active .sub {
+            color: var(--cream);
+        }
+
+        .calc-btn {
+            width: 100%;
+            background-color: var(--dark);
+            color: var(--ochre-l);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            padding: 1rem;
+            border: none;
+            border-radius: var(--r);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .calc-btn:hover {
+            background-color: var(--ochre);
+            color: var(--dark);
+        }
+
+        #results {
+            display: none;
+        }
+        
+        .main-price {
+            background-color: var(--dark);
+            border-radius: var(--r);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .main-price h2 {
+            color: var(--ochre-l);
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .main-price p {
+            color: var(--light);
+            font-size: 1.1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        td {
+            padding: 0.85rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+
+        td:last-child {
+            text-align: right;
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            color: var(--light);
+            font-size: 0.95rem;
+            border-top: 1.5px solid var(--border);
+            margin-top: 4rem;
+        }
+        
+        footer a {
+            color: var(--light);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--mid);
+        }
+        
+        footer .tagline {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            margin-top: 0.25rem;
+        }
+
+        .input-suffix {
+            position: relative;
+        }
+
+        .input-suffix input {
+            padding-right: 3rem;
+        }
+
+        .input-suffix .suffix {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--mid);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Hur ska jag prissätta min konst?</h1>
+        <div class="subtitle">Artlab · akvarellskiss.se · Fria verktyg för konstnärer</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="notice">
+            <p><strong>Så här fungerar formeln:</strong> Man tar betalt för storlek på målningen gånger (X) en faktor mellan 20–100 som du bedömer själv. Du plussar ihop höjd + bredd i centimeter (ej ram) och multiplicerar sedan summan med din faktor. Priset du får fram är inklusive ram.</p>
+            <p style="font-style: italic; margin-top: 0.5rem; font-size: 0.9rem;">Räkneexempel: En målning på 15×20 cm med faktor 30 blir: 15 + 20 = 35 × 30 = 1 050 kr.</p>
+        </div>
+
+        <div class="card">
+            <label>Målningens storlek (exklusive ram)</label>
+            <div class="grid-2">
+                <div>
+                    <span class="hint" style="display:block; margin-bottom:0.3rem;">Höjd</span>
+                    <div class="input-suffix">
+                        <input type="number" id="art-h" value="15" min="1" oninput="hideResults()">
+                        <span class="suffix">cm</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="hint" style="display:block; margin-bottom:0.3rem;">Bredd</span>
+                    <div class="input-suffix">
+                        <input type="number" id="art-w" value="20" min="1" oninput="hideResults()">
+                        <span class="suffix">cm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <label>Välj din erfarenhetsfaktor</label>
+            <div class="factor-grid">
+                <div class="factor-btn" data-factor="20" onclick="selectFactor(20)">
+                    <span class="icon">🐣</span>
+                    <span class="num">20</span>
+                    <span class="lbl">Nybörjare</span>
+                    <span class="sub">Nyss börjat måla</span>
+                </div>
+                <div class="factor-btn active" data-factor="30" onclick="selectFactor(30)">
+                    <span class="icon">🎨</span>
+                    <span class="num">30</span>
+                    <span class="lbl">Målat ett par år</span>
+                    <span class="sub">Haft några skapande år</span>
+                </div>
+                <div class="factor-btn" data-factor="40" onclick="selectFactor(40)">
+                    <span class="icon">🖌️</span>
+                    <span class="num">40</span>
+                    <span class="lbl">Målat några år</span>
+                    <span class="sub">God vana & erfarenhet</span>
+                </div>
+                <div class="factor-btn" data-factor="50" onclick="selectFactor(50)">
+                    <span class="icon">🏛️</span>
+                    <span class="num">50</span>
+                    <span class="lbl">Etablerad</span>
+                    <span class="sub">~5 000 timmar målande</span>
+                </div>
+                <div class="factor-btn" data-factor="100" onclick="selectFactor(100)">
+                    <span class="icon">👑</span>
+                    <span class="num">100</span>
+                    <span class="lbl">Professionell</span>
+                    <span class="sub">Konsthögskola / ~10 000h</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem;">
+                <label for="custom-factor">Eller välj en egen faktor valfritt mellan 20–100</label>
+                <input type="number" id="custom-factor" min="20" max="100" placeholder="T.ex. 35" oninput="applyCustomFactor()">
+            </div>
+        </div>
+
+        <button class="calc-btn" onclick="calculatePrice()">Räkna ut pris</button>
+
+        <div id="results">
+            <div class="main-price">
+                <h2 id="res-main">0 kr</h2>
+                <p>Rekommenderat försäljningspris (inklusive ram)</p>
+            </div>
+
+            <div class="card">
+                <label>Uträkning & specifikation</label>
+                <table>
+                    <tr>
+                        <td>Målningens mått (Höjd + Bredd)</td>
+                        <td id="row-dimensions">0 + 0 = 0 cm</td>
+                    </tr>
+                    <tr>
+                        <td>Vald prissättningsfaktor</td>
+                        <td id="row-factor">× 0</td>
+                    </tr>
+                    <tr>
+                        <td>Slutpris (inkl. ram)</td>
+                        <td id="row-total" style="color: var(--ochre); font-size: 1.3rem;">0 kr</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Artlab · <a href="https://www.akvarellskiss.se" target="_blank">akvarellskiss.se</a></p>
+        <p class="tagline">Fria verktyg för konstnärer</p>
+    </footer>
+
+    <script>
+        let selectedFactorValue = 30;
+
+        function selectFactor(value) {
+            selectedFactorValue = value;
+            document.getElementById('custom-factor').value = '';
+            
+            document.querySelectorAll('.factor-btn').forEach(btn => {
+                if (parseInt(btn.getAttribute('data-factor')) === value) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            hideResults();
+        }
+
+        function applyCustomFactor() {
+            const customVal = parseInt(document.getElementById('custom-factor').value);
+            document.querySelectorAll('.factor-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if (!isNaN(customVal)) {
+                selectedFactorValue = customVal;
+            } else {
+                selectedFactorValue = 0;
+            }
+            hideResults();
+        }
+
+        function hideResults() {
+            document.getElementById('results').style.display = 'none';
+        }
+
+        function fmt(num) {
+            return Math.round(num).toLocaleString('sv-SE') + ' kr';
+        }
+
+        function calculatePrice() {
+            const h = parseFloat(document.getElementById('art-h').value) || 0;
+            const w = parseFloat(document.getElementById('art-w').value) || 0;
+            
+            let factor = selectedFactorValue;
+            if (factor === 0) {
+                alert("Vänligen välj en erfarenhetsfaktor eller fyll i en egen.");
+                return;
+            }
+
+            const sumDimensions = h + w;
+            const totalPrice = sumDimensions * factor;
+
+            document.getElementById('row-dimensions').innerHTML = `${h} + ${w} = <strong>${sumDimensions} cm</strong>`;
+            document.getElementById('row-factor').innerText = `× ${factor}`;
+            document.getElementById('row-total').innerText = fmt(totalPrice);
+            document.getElementById('res-main').innerText = fmt(totalPrice);
+
+            document.getElementById('results').style.display = 'block';
+            
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    </script>
+</body>
+</html>
